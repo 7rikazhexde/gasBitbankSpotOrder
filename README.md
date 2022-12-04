@@ -1,0 +1,2 @@
+# gasBitbankSpotOrder
+bitbankのAPIから指定する通貨ペアの最新ティッカー情報(buy:現在の買い注文の最高値)を取得して指定価格分を指値注文するGoogle Apps Script(GAS)
