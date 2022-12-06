@@ -4,8 +4,8 @@
  * @return {string} エラー名とスタックトレース
  */
 function printError(error){
-  return "[Error     ] "  + error.name + "\n" + 
-         "[StackTrace]\n" + error.stack;
+  return '[Error     ] '  + error.name + '\n' + 
+         '[StackTrace]\n' + error.stack;
 }
 
 /**
@@ -20,26 +20,27 @@ function printError(error){
 function errorParser(json_dict){
   // 変数初期化
   var is_error = false;
-  var message = "";
-  
-  // エラーコード判定処理
-  if (json_dict['success'] == 1){
-    return is_error;
-  } else {
-    code = json_dict['data']['code'];
-    contents = ERROR_CODES[code]
+  var message = '';
+
+  // レスポンスからエラーかどうか判別する
+  if (json_dict['success'] == 0){
+    const code = json_dict['data']['code'];
+    const contents = ERROR_CODES[code]
+    // エラーコードを検索
     if(code in ERROR_CODES){
+      // エラーあり(エラーコードあり)
       is_error = true;
-      message = '　エラーコード: ' + code + "\n" + '　内容: ' + contents;
+      message = '　エラーコード: ' + code + '\n' + '　内容: ' + contents;
     } else {
+      // エラーあり(エラーコード不明)
       is_error = true;
       message = '不明なエラーです。サポートにお問い合わせ下さい'
     }
     // エラー内容をログに出力してメールを送信する
     console.error(message);
     sendErrorMail(message);
-    return is_error;
   }
+  return is_error;
 }
 
 /**
@@ -49,7 +50,7 @@ function errorParser(json_dict){
  * @see エラーコード一覧 (2022-09-29)
  * @link https://github.com/bitbankinc/bitbank-api-docs/blob/master/errors_JP.md
  */
-ERROR_CODES = {
+const ERROR_CODES = {
     // システムエラー/予期せぬエラー
     '10000': 'URLが存在しません',
     '10001': 'システムエラーが発生しました。サポートにお問い合わせ下さい',
@@ -104,7 +105,7 @@ ERROR_CODES = {
     '30120': '住所(建物・アパート名)を入力して下さい',
     '30121': '出金目的を指定して下さい',
     // バリデーションエラー
-    '40001': '注文数量が不正でず',
+    '40001': '注文数量が不正です',
     '40006': 'count値が不正です',
     '40007': '終了時期が不正です',
     '40008': 'end_id値が不正です',

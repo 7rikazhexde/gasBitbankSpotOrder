@@ -44,8 +44,8 @@ function getBuyPrice(pair){
   
 /**
  * getBuyPrice()関数で取得したpairで指定したコインの最新ティッカー情報(buy:現在の買い注文の最高値)から価格と注文量を作成する関数
- * @desc 注文量はティッカー情報とADJUST_ORDER_NUMから計算して設定する
- * @todo ユーザーは ADJUST_ORDER_NUM と ADJUST_PRICE を config.gs で設定すること
+ * @desc 注文量はティッカー情報とORDER_NUMから計算して設定する
+ * @todo ユーザーは ORDER_NUM と ADJUST_PRICE を config.gs で設定すること
  * @param {String} pair ペア情報
  * @return {Array} [is_set_order_data, order_price, order_num]という形式で返す。
  * @type {Boolean} is_set_order_data 配列要素[0]に格納される注文データ準備状況
@@ -71,8 +71,8 @@ function setOrderData(pair){
 
   try {
     // 注文量更新
-    // 例)ADJUST_ORDER_NUMが1000の場合、1000円分のbtc_jpyの注文量を計算する。
-    var order_num = (ADJUST_ORDER_NUM / (buy_price - ADJUST_PRICE)).toFixed(DECIMAL_DIGITS_BTC);
+    // 例)ORDER_NUMが1000の場合、1000円分のbtc_jpyの注文量を計算する。
+    var order_num = (ORDER_NUM / (buy_price - ADJUST_PRICE)).toFixed(DECIMAL_DIGITS_BTC);
   } catch(e) {
     const errorMessage = printError(e);
     // エラー内容をログに出力してメールを送信する
@@ -146,11 +146,11 @@ function spotOrderCoin(){
 
   // パラメータをリクエストボディに設定
   const body = {
-    "pair": pair, //通貨ペア
-    "price": order_price, //価格
-    "amount": order_num, //注文量
-    "side": "buy", // 買い注文
-    "type": "limit" // 指値
+    'pair': pair, //通貨ペア
+    'price': order_price, //価格
+    'amount': order_num, //注文量
+    'side': 'buy', // 買い注文
+    'type': 'limit' // 指値
   };
 
   // bodyの内容をJSON文字列に変換
@@ -168,22 +168,22 @@ function spotOrderCoin(){
 
   // ヘッダー情報を設定
   const headers = {
-    "Content-Type": "application/json",
-    "ACCESS-KEY": API_KEY,
-    "ACCESS-NONCE": nonce,
-    "ACCESS-SIGNATURE": signature
+    'Content-Type': 'application/json',
+    'ACCESS-KEY': API_KEY,
+    'ACCESS-NONCE': nonce,
+    'ACCESS-SIGNATURE': signature
   };
 
   // payloadをoptionsに設定
   const options = {
-    "method": "POST",
-    "headers": headers,
-    "payload": payload
+    'method': 'POST',
+    'headers': headers,
+    'payload': payload
   };
 
-  // ビットコインを買い注文
+  // btc_jpyを指定価格で指値注文する
   const response = JSON.parse( UrlFetchApp.fetch(PRIVATE_ENDPOINT_URL + '/user/spot/order', options) );
-
+  
   // レスポンスがエラーでなければログを出力する
   if (errorParser(response) != true){
     console.log('btc_jpyの指値注文成功');
@@ -191,5 +191,5 @@ function spotOrderCoin(){
     // レスポンスをJSON文字列に変換してメール送信する
     sendMail(JSON.stringify(response));
   }
-  return;
+  return response;
 }
