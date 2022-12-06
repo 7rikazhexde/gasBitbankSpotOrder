@@ -15,7 +15,6 @@ function sendErrorMail(message) {
              + message;
 
   GmailApp.sendEmail(recipient, subject, body);
-  retutn;
 }
   
 /**
@@ -35,7 +34,6 @@ function sendMail(message) {
              + message;
 
   GmailApp.sendEmail(recipient, subject, body);
-  return;
 }
   
 /**

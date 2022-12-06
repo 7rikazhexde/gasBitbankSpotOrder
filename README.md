@@ -49,7 +49,14 @@ bitbankのAPIから通貨ペア(btc_jpy)の最新ティッカー情報(buy:現�
         * ```ACCESS-SIGNATURE``` : ```signature```
   * エラー処理
     * POSTレスポンスの結果からエラーコードを参照し**エラー処理**(**エラーログ出力とGmailによるエラーメール送信**)をします。
-
+* 指値注文の実行形式
+※ 実際に指値注文を実行する際は[設定と使い方](https://github.com/7rikazhexde/gasBitbankSpotOrder/blob/5d30adc1cb311a00ddb98ffb8c2c091e93e202a6/README.md#L59)を参照してください。
+  * 関数の手動実行
+    * プロジェクトページから```spotOrderCoin()```を手動実行することで指値注文を実行します。
+  * 定期実行設定
+    * [プロジェクトを定期実行設定](https://github.com/7rikazhexde/gasBitbankSpotOrder/blob/5d30adc1cb311a00ddb98ffb8c2c091e93e202a6/README.md#L86)により関数を実行することで指値注文を実行します。
+  * POSTリクエスト
+    * Webアプリ(URL)に対してPOSTリクエストすることで指値注文を実行します。
 
 ## 設定と使い方
 ### API設定
@@ -62,7 +69,7 @@ config.gs(```変数名```)に以下の設定情報を定義してください。
 
 ### 注文情報設定
 * 通貨ペア: ```PAIR```('btc_jpy'で固定)
-* 希望購入価格: ```ADJUST_ORDER_NUM```
+* 希望購入価格: ```ORDER_NUM```
 * 指値取引のために最新取引価格から調整するための価格: ```ADJUST_PRICE```(0以上で指定)
 * 取引時の小数点以下の桁数 : ```DECIMAL_DIGITS_BTC```(8固定)
 
@@ -86,3 +93,35 @@ config.gs(```変数名```)に以下の設定情報を定義してください。
 
 * Gmailへのアクセス許可設定
   * Gmailのすべてのメールの閲覧、作成、送信、完全な削除
+### POSTリクエスト設定
+#### アクセス元
+#### 
+* HTTPメソッド
+  * POST
+* URL
+  * [ウェブアプリURLの設定](https://github.com/7rikazhexde/gasBitbankSpotOrder/blob/5d30adc1cb311a00ddb98ffb8c2c091e93e202a6/README.md#L118)で取得したURL
+* Header
+  * Content-Type: application/json
+* Body
+  アクセス元の情報をsendDataとして送信してください。
+  ```
+  "sendData": {
+  	"uniqueKey": "[アクセス元識別情報]", //文字列
+  	"orderPrice": [希望価格] //数字
+    }
+  ```
+
+#### アクセス先(GAS)
+#### 注意事項
+* **ウェブアプリURL**は不用意な公開は避け、セキュリティに十分配慮して運用してください。
+* **アクセス元識別情報**はユーザーが個別に設定し、セキュリティに十分配慮して管理してください。
+#### 設定
+* ウェブアプリURLの設定
+  * デプロイ → 新しいデプロイ
+  * 種類の選択　→ ウェブアプリ
+  * 次のユーザーとして実行: 自分(メールアドレス)
+  * アクセスできるユーザー: 利用状況に合わせて設定してください。
+* ソースコード
+  * GASからbitbank APIでPOSTリクエストを実行許可するためにアクセス元を識別する情報を定義します。
+  * ```doPost()関数```ではアクセス元が送信する識別情報と希望注文価格の情報とPOSTリクエストの実行許可を判断するリスト(```API_REQUEST_PERMISSION_LIST```)と比較して、実行可能なアクセス元を判断した場合のみ指値注文を実行します。
+  * ```config.gs``` / ```API_REQUEST_PERMISSION_LIST``` に```['アクセス元識別情報1','アクセス元識別情報2',...]```の形式で定義してください。
