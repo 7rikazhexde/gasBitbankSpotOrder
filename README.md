@@ -22,13 +22,15 @@ bitbankのAPIから通貨ペア(btc_jpy)の最新ティッカー情報(buy:現�
 | 関数名 | 説明 | 
 | -- | -- | 
 |```getBuyPrice(pair)```|[Public API](https://github.com/bitbankinc/bitbank-api-docs/blob/master/public-api_JP.md)を利用してTicker情報から<br>オープンな情報を取得する関数。|
+
 ※本コードでは現在の買い注文の最高値(buy))を取得します。
 
 * 指値注文
 
 | 関数名 | 説明 | 
 | -- | -- | 
-| setOrderData(pair) | `getBuyPrice(pair)`で取得した最新ティッカー情報(buy)から<br>`config.gs`で定義(後述)する`ADJUST_ORDER_NUM`と<br>`ADJUST_PRICE`のパラメータと[PrivateAPI](https://github.com/bitbankinc/bitbank-api-docs/blob/master/rest-api_JP.md)利用して<br>指定価格分の価格と注文量を設定する関数。 | 
+| setOrderData(pair) | `getBuyPrice(pair)`で取得した最新ティッカー情報(buy)から<br>`config.gs`で定義(後述)する`ADJUST_ORDER_NUM`と<br>`ADJUST_PRICE`のパラメータと[PrivateAPI](https://github.com/bitbankinc/bitbank-api-docs/blob/master/rest-api_JP.md)利用して<br>指定価格分の価格と注文量を設定する関数。 |
+
 ※注文情報はParameters(requestBody)仕様に従い作成します。
 
   * 認証 (spotOrderCoin()で実行)
@@ -96,6 +98,7 @@ APIシークレットキーAPIの取得は[公式ドキュメント](https://sup
 |希望購入価格|```ORDER_NUM```|
 |注文調整価格|```ADJUST_PRICE```(0以上で指定)|
 |取引時の小数点以下の桁数|```DECIMAL_DIGITS_BTC```(8固定)|
+
 ※注文調整価格は注文時に即約定しないように定数分引いた金額を基準に計算します。定数は0とすれば現在の買い注文の最高値で注文数量を計算するため価格調整が不要な場合は0を設定してください。
 
 ### メール設定
