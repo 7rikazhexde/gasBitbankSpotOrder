@@ -17,7 +17,7 @@ bitbankのAPIから通貨ペア(btc_jpy)の最新ティッカー情報(buy:現�
 * GASでbitbankのPublic APIとPrivate APIを使用して指定する通貨ペアの**HTTPリクエスト時点の最新のティッカー情報**(**buy:現在の買い注文の最高値**)を取得して指定価格分を指値注文を実行します。
 * 注文方法として関数の個別実行、または定期実行します。
 
-* 最新ティッカー情報の取得
+### 最新ティッカー情報の取得
 
 | 関数名 | 説明 | 
 | -- | -- | 
@@ -25,7 +25,7 @@ bitbankのAPIから通貨ペア(btc_jpy)の最新ティッカー情報(buy:現�
 
 ※本コードでは現在の買い注文の最高値(buy))を取得します。
 
-* 指値注文
+### 指値注文
 
 | 関数名 | 説明 | 
 | -- | -- | 
@@ -33,9 +33,9 @@ bitbankのAPIから通貨ペア(btc_jpy)の最新ティッカー情報(buy:現�
 
 ※注文情報はParameters(requestBody)仕様に従い作成します。
 
-  * 認証 (spotOrderCoin()で実行)
+### 認証 (spotOrderCoin()で実行)
 
-| 関数名 | 説明 | 
+| メソッド名 | 説明 | 
 | -- | -- | 
 | Utilities.computeHmacSha256Signature(concatenated_string, API_SECRET) | [bitbank APIの認証手順](https://github.com/bitbankinc/bitbank-api-docs/blob/master/rest-api_JP.md#%E8%AA%8D%E8%A8%BC)に従い認証情報を作成します。署名作成用の文字列として「`nonce`、`payload`」 を連結して`concatenated_string`を作成し、文字列を **HMAC-SHA256 形式**でAPI_SECRETを使用して署名(`signature`を作成します。 | 
 
@@ -46,12 +46,13 @@ bitbankのAPIから通貨ペア(btc_jpy)の最新ティッカー情報(buy:現�
 | API_SECRET | APIキーページで取得したアクセスシークレット | 
 | signature  | 署名(※```computeHmacSha256Signature()```ではバイト文字列を返すためGASで使用するため16進数化します。) | 
 
-  * 指値注文 (spotOrderCoin()で実行)
+### POSTリクエスト (spotOrderCoin()で実行)
 
-| 関数名 | 説明 |
+| メソッド名 | 説明 |
 | -- | -- | 
 | UrlFetchApp.fetch(url, option) | 引数urlに取得する URL(```PRIVATE_ENDPOINT_URL + '/user/spot/order'```)を指定してPOSTリクエストして指値注文する関数|
 
+### パラメータ指定
 パラメータとして```method```,```headers```,```payload```を```option```に設定して**POSTリクエスト**を送信します。
 
 | パラメータ | 説明 |
@@ -66,10 +67,10 @@ bitbankのAPIから通貨ペア(btc_jpy)の最新ティッカー情報(buy:現�
 |```ACCESS-NONCE``` | ```nonce```|
 |```ACCESS-SIGNATURE``` | ```signature```|
 
- * エラー処理
+### エラー処理
 POSTレスポンスの結果からエラーコードを参照し**エラー処理**(**エラーログ出力とGmailによるエラーメール送信**)をします。
 
-* 指値注文の実行形式
+### 指値注文の実行形式
 ※ 実際に指値注文を実行する際は**設定と使い方**を参照してください。
 
 | 処理 | 説明 |
@@ -128,7 +129,7 @@ APIシークレットキーAPIの取得は[公式ドキュメント](https://sup
 
 | 設定情報 | 変数名 |説明|
 | -- | -- | -- |
-| HTTPメソッド|POST|-|
+| HTTPメソッド||POSTを指定する|
 |URL|-|[ウェブアプリURLの設定](https://github.com/7rikazhexde/gasBitbankSpotOrder/blob/5d30adc1cb311a00ddb98ffb8c2c091e93e202a6/README.md#L118)で取得したURL|
 |Header|application/json|Content-Type|
 |Body|sendData|アクセス元が送信する情報|
