@@ -87,7 +87,8 @@ config.gs(```変数名```)に以下の設定情報を定義してください。
 |Public APIのエンドポイントURL|```PUBLIC_ENDPOINT_URL```|
 |Private APIエンドポイントURL|```PRIVATE_ENDPOINT_URL```|
 |APIキー|```API_KEY```|
-|APIシークレットキー|```API_SEACRET```||
+|APIシークレットキー|```API_SEACRET```|
+
 APIシークレットキーAPIの取得は[公式ドキュメント](https://support.bitbank.cc/hc/ja/articles/360036234574-API%E3%82%AD%E3%83%BC%E3%81%AE%E7%99%BA%E8%A1%8C%E3%81%A8API%E4%BB%95%E6%A7%98%E3%81%AE%E7%A2%BA%E8%AA%8D%E6%96%B9%E6%B3%95)を参照してください。
 
 ### 注文情報設定
